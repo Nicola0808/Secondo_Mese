@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Quinto Motivo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:  #faf6f1;
+      --blush:  #e8d5c4;
+      --rose:   #c9897a;
+      --deep:   #7a4f3e;
+      --ink:    #3a2820;
+      --gold:   #c4a882;
+      --soft:   #f2e8e0;
+    }
+
+    html, body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'Jost', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ── */
+    .top-nav {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 20px 0;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--deep);
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .back-btn:active { color: var(--rose); }
+
+    .back-btn svg {
+      width: 18px; height: 18px;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      fill: none;
+    }
+
+    .page-counter {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 13px;
+      color: var(--gold);
+      opacity: 0.8;
+    }
+
+    /* ── WRAPPER ── */
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 24px 20px 60px;
+    }
+
+    /* ── PHOTO FRAME ── */
+    .photo-frame {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      background: var(--soft);
+      box-shadow:
+        0 4px 30px rgba(122,79,62,0.12),
+        0 1px 4px rgba(122,79,62,0.08),
+        inset 0 0 0 1px rgba(196,168,130,0.2);
+      margin-bottom: 32px;
+    }
+
+    /* Decorative corner accents */
+    .photo-frame::before,
+    .photo-frame::after {
+      content: '';
+      position: absolute;
+      width: 28px; height: 28px;
+      border-color: var(--gold);
+      border-style: solid;
+      opacity: 0.5;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .photo-frame::before {
+      top: 10px; left: 10px;
+      border-width: 1.5px 0 0 1.5px;
+      border-radius: 4px 0 0 0;
+    }
+
+    .photo-frame::after {
+      bottom: 10px; right: 10px;
+      border-width: 0 1.5px 1.5px 0;
+      border-radius: 0 0 4px 0;
+    }
+
+    .photo-frame img,
+    .photo-placeholder {
+      width: 100%;
+      display: block;
+      aspect-ratio: 4/5;
+      object-fit: cover;
+    }
+
+    .photo-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(145deg, var(--soft) 0%, var(--blush) 100%);
+      aspect-ratio: 4/5;
+      gap: 14px;
+    }
+
+    .photo-placeholder svg {
+      width: 44px; height: 44px;
+      stroke: var(--gold);
+      stroke-width: 1;
+      fill: none;
+      opacity: 0.6;
+    }
+
+    .photo-placeholder p {
+      font-family: 'Jost', sans-serif;
+      font-weight: 200;
+      font-size: 10px;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--deep);
+      opacity: 0.45;
+    }
+
+    /* ── TEXT SECTION ── */
+    .text-section {
+      padding: 0 4px;
+    }
+
+    .eyebrow {
+      font-family: 'Jost', sans-serif;
+      font-weight: 200;
+      font-size: 9px;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: var(--rose);
+      margin-bottom: 10px;
+    }
+
+    .photo-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(30px, 8vw, 40px);
+      line-height: 1.08;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .photo-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 16px;
+      color: var(--rose);
+      opacity: 0.8;
+      margin-bottom: 22px;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .divider span {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, var(--blush), transparent);
+    }
+
+    .divider svg {
+      width: 10px; height: 10px;
+      fill: var(--gold);
+      opacity: 0.7;
+      flex-shrink: 0;
+    }
+
+    .photo-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: 17px;
+      line-height: 1.75;
+      color: var(--ink);
+      opacity: 0.82;
+    }
+
+    /* ── NAVIGATION ── */
+    .nav-strip {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 40px;
+      padding-top: 24px;
+      border-top: 1px solid var(--blush);
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      text-decoration: none;
+      color: var(--deep);
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+
+    .nav-link:active { opacity: 1; color: var(--rose); }
+
+    .nav-link svg {
+      width: 16px; height: 16px;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      fill: none;
+    }
+
+    .nav-link.disabled {
+      opacity: 0.2;
+      pointer-events: none;
+    }
+
+    .home-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--gold);
+      opacity: 0.5;
+    }
+
+    /* ── ANIMATIONS ── */
+    .photo-frame {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.6s cubic-bezier(0.25,0.46,0.45,0.94) 0.05s forwards;
+    }
+
+    .text-section {
+      opacity: 0;
+      animation: fadeUp 0.6s cubic-bezier(0.25,0.46,0.45,0.94) 0.2s forwards;
+    }
+
+    .nav-strip {
+      opacity: 0;
+      animation: fadeUp 0.5s ease 0.35s forwards;
+    }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="top-nav">
+    <a class="back-btn" href="../index.html">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      Torna
+    </a>
+    <span class="page-counter">5 / 6</span>
+  </nav>
+
+  <div class="wrapper">
+
+    <div class="photo-frame">
+      <!-- Sostituisci con: <img src="../images/foto5.jpg" alt="Per Sempre"> -->
+      <img src="../images/foto5.jpg" alt="Per Sempre">
+    </div>
+
+    <div class="text-section">
+      <p class="eyebrow"></p>
+      <h1 class="photo-title">Pensavi che fossero solo 5?</h1>
+      <p class="photo-subtitle"></p>
+
+      <div class="divider">
+        <svg viewBox="0 0 24 24"><path d="M12 21.593c-5.63-5.539-11-10.297-11-14.402 0-3.791 3.068-5.191 5.281-5.191 1.312 0 4.151.501 5.719 4.457 1.59-3.968 4.464-4.447 5.726-4.447 2.54 0 5.274 1.621 5.274 5.181 0 4.069-5.136 8.625-11 14.402z"/></svg>
+        <span></span>
+      </div>
+
+      <p class="photo-text">Ecco 100 motivi:</p>
+<p class="photo-text">1. Perché mi fai ridere.</p>
+<p class="photo-text">2. Perché mi rendi felice.</p>
+<p class="photo-text">3. Perché mi ascolti.</p>
+<p class="photo-text">4. Perché con te non mi annoio mai.</p>
+<p class="photo-text">5. Perché sei bella.</p>
+<p class="photo-text">6. Perché hai un sorriso che mi piace.</p>
+<p class="photo-text">7. Perché sei intelligente.</p>
+<p class="photo-text">8. Perché sai sorprendermi.</p>
+<p class="photo-text">9. Perché mi fai stare bene.</p>
+<p class="photo-text">10. Perché mi capisci.</p>
+
+<p class="photo-text">11. Perché ti interessi a quello che faccio.</p>
+<p class="photo-text">12. Perché mi supporti.</p>
+<p class="photo-text">13. Perché mi piace tutto quello che siamo.</p>
+<p class="photo-text">14. Perché sei unica.</p>
+<p class="photo-text">15. Perché con te posso essere me stesso.</p>
+<p class="photo-text">16. Perché mi fai sentire importante.</p>
+<p class="photo-text">17. Perché hai un carattere speciale.</p>
+<p class="photo-text">18. Perché sei dolce.</p>
+<p class="photo-text">19. Perché sei divertente.</p>
+<p class="photo-text">20. Perché hai fiducia in me.</p>
+
+<p class="photo-text">21. Perché riesci a migliorarmi.</p>
+<p class="photo-text">22. Perché mi fai vedere le cose in modo diverso.</p>
+<p class="photo-text">23. Perché hai una bella energia.</p>
+<p class="photo-text">24. Perché mi piace parlare con te.</p>
+<p class="photo-text">25. Perché mi piace passare il tempo con te.</p>
+<p class="photo-text">26. Perché mi fai sorridere anche nelle giornate no.</p>
+<p class="photo-text">27. Perché sei sincera.</p>
+<p class="photo-text">28. Perché sei forte.</p>
+<p class="photo-text">29. Perché sei determinata.</p>
+<p class="photo-text">30. Perché hai dei sogni.</p>
+
+<p class="photo-text">31. Perché credi in quello che fai.</p>
+<p class="photo-text">32. Perché sei spontanea.</p>
+<p class="photo-text">33. Perché hai un cuore grande.</p>
+<p class="photo-text">34. Perché mi fai sentire fortunato.</p>
+<p class="photo-text">35. Perché sai farmi calmare.</p>
+<p class="photo-text">36. Perché mi fai venire voglia di vederti.</p>
+<p class="photo-text">37. Perché sei speciale per me.</p>
+<p class="photo-text">38. Perché mi piace la tua voce.</p>
+<p class="photo-text">39. Perché mi piace il tuo modo di parlare.</p>
+<p class="photo-text">40. Perché sei genuina.</p>
+
+<p class="photo-text">41. Perché non riesco a immaginare questi giorni senza di te.</p>
+<p class="photo-text">42. Perché accetti i miei difetti.</p>
+<p class="photo-text">43. Perché riesci a sopportarmi.</p>
+<p class="photo-text">44. Perché mi fai sentire a casa.</p>
+<p class="photo-text">45. Perché sei imprevedibile.</p>
+<p class="photo-text">46. Perché mi fai ridere per cose stupide.</p>
+<p class="photo-text">47. Perché sei una brava persona.</p>
+<p class="photo-text">48. Perché hai un bel modo di vedere il mondo.</p>
+<p class="photo-text">49. Perché sai essere seria quando serve.</p>
+<p class="photo-text">50. Perché sai essere leggera quando serve.</p>
+
+<p class="photo-text">51. Perché mi rendi le giornate migliori.</p>
+<p class="photo-text">52. Perché sei sempre interessante.</p>
+<p class="photo-text">53. Perché mi piace conoscerti ogni giorno di più.</p>
+<p class="photo-text">54. Perché mi piace stare accanto a te.</p>
+<p class="photo-text">55. Perché sei coraggiosa.</p>
+<p class="photo-text">56. Perché sei autentica.</p>
+<p class="photo-text">57. Perché mi fido di te.</p>
+<p class="photo-text">58. Perché sai ascoltare.</p>
+<p class="photo-text">59. Perché sai dare consigli.</p>
+<p class="photo-text">60. Perché hai un bellissimo sguardo.</p>
+
+<p class="photo-text">61. Perché mi piace il tuo carattere.</p>
+<p class="photo-text">62. Perché sei diversa da tutte le altre.</p>
+<p class="photo-text">63. Perché riesci a sorprendermi.</p>
+<p class="photo-text">64. Perché hai sempre qualcosa da raccontare.</p>
+<p class="photo-text">65. Perché sei importante per me.</p>
+<p class="photo-text">66. Perché con te tutto sembra più semplice.</p>
+<p class="photo-text">67. Perché riesci a farmi ridere anche quando non ne ho voglia. (so che è il primo numero che sei venuta a vedere)</p>
+<p class="photo-text">68. Perché hai un modo unico di essere.</p>
+<p class="photo-text">69. Perché mi piace la tua compagnia.</p>
+<p class="photo-text">70. Perché sei gentile.</p>
+
+<p class="photo-text">71. Perché sei premurosa.</p>
+<p class="photo-text">72. Perché hai pazienza.</p>
+<p class="photo-text">73. Perché sai farmi sentire meglio.</p>
+<p class="photo-text">74. Perché mi piace il tuo modo di pensare.</p>
+<p class="photo-text">75. Perché sei affidabile.</p>
+<p class="photo-text">76. Perché sei vera.</p>
+<p class="photo-text">77. Perché mi piace parlare del futuro con te.</p>
+<p class="photo-text">78. Perché mi fai sentire capito.</p>
+<p class="photo-text">79. Perché sei una delle cose più belle della mia vita.</p>
+<p class="photo-text">80. Perché sai rendere speciali le cose normali.</p>
+
+<p class="photo-text">81. Perché mi piace condividere momenti con te.</p>
+<p class="photo-text">82. Perché mi piace vederti felice.</p>
+<p class="photo-text">83. Perché sei dolce senza provarci.</p>
+<p class="photo-text">84. Perché hai un sorriso contagioso.</p>
+<p class="photo-text">85. Perché sei bella dentro e fuori.</p>
+<p class="photo-text">86. Perché sai farmi emozionare.</p>
+<p class="photo-text">87. Perché sei sempre interessante.</p>
+<p class="photo-text">88. Perché mi piace la tua sincerità.</p>
+<p class="photo-text">89. Perché sei leale.</p>
+<p class="photo-text">90. Perché mi sento bene quando ci sei.</p>
+<p class="photo-text">91. Perché mi piace il tuo modo di ridere.</p>
+<p class="photo-text">92. Perché mi piace come mi guardi.</p>
+<p class="photo-text">93. Perché riesci a migliorare ogni giornata.</p>
+<p class="photo-text">94. Perché con te posso parlare di tutto.</p>
+<p class="photo-text">95. Perché sei una persona rara.</p>
+<p class="photo-text">96. Perché mi fai sentire fortunato.</p>
+<p class="photo-text">97. Perché sei incredibile.</p>
+<p class="photo-text">98. Perché mi rendi felice.</p>
+<p class="photo-text">99. Perché sei tu.</p>
+<p class="photo-text">100. Perché tra tutte le persone, scegli ancora me. ❤️</p>
+
+
+
+
+
+      
+
+      <div class="nav-strip">
+        <a class="nav-link" href="foto4.html"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>Prec.</a>
+        <a class="back-btn" href="../index.html" title="Home">
+          <div class="home-dot"></div>
+        </a>
+        <a class="nav-link" href="foto6.html">Succ.<svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></a>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
